@@ -1,0 +1,392 @@
+<head>
+  <title>Customer Care Queue System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .social-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .social-button:hover {
+      background-color: #45a049;
+    }
+
+    .social-icons {
+      display: none;
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .social-icons.show {
+      display: block;
+    }
+
+    .social-icons a {
+      display: block;
+      color: #333;
+      font-size: 20px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      color: #4CAF50;
+    }
+    
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .fullscreen-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .queue {
+      background-color: #f9f9f9;
+      border: 2px solid #ccc;
+      padding: 30px;
+      max-width: 800px;
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 36px;
+      text-align: center;
+      color: #333;
+    }
+
+    .service-selection {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .service-selection label {
+      margin-right: 10px;
+      color: #333;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      margin-left:5px;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .queue-display {
+      font-size: 20px;
+      margin-bottom: 30px;
+      animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .counters {
+      display: flex;
+      justify-content: center;
+    }
+
+    .counter {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 30px;
+      margin: 15px;
+      text-align: center;
+      width: 180px;
+      border-radius: 10px;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+      animation: zoomIn 0.8s ease;
+    }
+
+    .counter:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes zoomIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .counter-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+
+    .counter-number {
+      font-size: 32px;
+      color: #4CAF50;
+      font-weight: 500;
+    }
+
+    .counter-service {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .counter-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 6px;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .counter-button:hover {
+      background-color: #45a049;
+    }
+
+    .total-services {
+      margin-top: 20px;
+    }
+
+    .new-customer-info {
+      margin-bottom: 30px;
+      animation: fadeInUp 1s ease;
+    }
+
+    .new-customer-info p {
+      margin: 0;
+      font-size: 18px;
+      color: #888;
+    }
+
+    .waiting-time {
+      font-size: 16px;
+      color: #888;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .counter-animating {
+      animation: pulse 0.6s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="fullscreen-container">
+    <div class="queue">
+      <h1>Customer Care Queue System</h1>
+      <div class="service-selection">
+        <label for="serviceName">Select Service:</label>
+        <select id="serviceName" class="form-control">
+          <option value="customer_services">Customer Services</option>
+          <option value="account">Account</option>
+          <option value="billing_info">Billing Info</option>
+          <option value="general_issues">General Issues</option>
+        </select>
+        <button onclick="joinQueue()" class="btn btn-primary">Join Queue</button>
+      </div>
+      <div class="new-customer-info">
+        <p>Estimated Waiting Time for New Customer: <span id="newCustomerWaitingTime">N/A</span></p>
+      </div>
+      <div class="queue-display" id="queueDisplay"></div>
+      <div class="counters" id="counters"></div>
+      <div class="total-services">
+        <p>Total Services Given Today: <span id="totalServices">0</span></p>
+      </div>
+    </div>
+  </div>
+<!-- Floating Social Button -->
+  <button class="social-button" onclick="toggleSocialIcons()">
+    <i class="fas fa-share-alt"></i>
+  </button>
+
+  <!-- Floating Social Icons -->
+  <div class="social-icons" id="socialIcons">
+    <a href="https://www.facebook.com/cxrana" target="_blank"><i class="fab fa-facebook"></i></a>
+    <a href="https://www.linkedin.com/in/ahrana/" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <a href="https://github.com/ahrana" target="_blank"><i class="fab fa-github"></i></a>
+    <!-- Add more social media icons as needed -->
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+   <script>
+    let queue = [];
+    let queueNumber = 1;
+    let counters = 3; // Number of customer care counters
+    let totalServices = 0;
+
+    function updateQueueDisplay() {
+      const queueDisplay = document.getElementById("queueDisplay");
+      queueDisplay.innerHTML = queue.map((customer, index) => `<div>Token number: ${index + 1} | ${customer.name} | Service: ${customer.service}</div>`).join("");
+    }
+
+    function updateNewCustomerWaitingTime() {
+      const serviceName = document.getElementById("serviceName").value;
+      const estimatedWaitingTime = calculateEstimatedWaitingTime(serviceName);
+      const remainingMinutes = Math.floor(estimatedWaitingTime / 60000);
+      const remainingSeconds = Math.floor((estimatedWaitingTime % 60000) / 1000);
+      document.getElementById("newCustomerWaitingTime").innerText = `${remainingMinutes}m ${remainingSeconds}s`;
+    }
+
+    function joinQueue() {
+      const customerName = prompt("Please enter your name:");
+      if (customerName) {
+        const serviceName = document.getElementById("serviceName").value;
+        const estimatedWaitingTime = calculateEstimatedWaitingTime(serviceName);
+        const customer = {
+          name: customerName,
+          service: serviceName,
+          startTime: Date.now(),
+        };
+        queue.push(customer);
+        updateQueueDisplay();
+        alert(`Welcome to the queue, ${customerName}! Your queue number is ${queueNumber}.`);
+        queueNumber++;
+        updateWaitingTimeEstimations();
+      }
+    }
+
+    function updateCounters() {
+      const countersContainer = document.getElementById("counters");
+      countersContainer.innerHTML = '';
+      for (let i = 1; i <= counters; i++) {
+        countersContainer.innerHTML += `
+          <div class="counter" id="counter${i}">
+            <i class="fas fa-user counter-icon"></i>
+            <div class="counter-number">0</div>
+            <div class="counter-service"></div>
+            <button class="counter-button" onclick="serveNext(${i})">Serve Next</button>
+          </div>
+        `;
+      }
+    }
+
+    function serveNext(counterIndex) {
+      if (queue.length > 0) {
+        const nextCustomer = queue.shift();
+        updateQueueDisplay();
+        document.getElementById(`counter${counterIndex}`).classList.add("counter-animating");
+        setTimeout(() => {
+          document.getElementById(`counter${counterIndex}`).classList.remove("counter-animating");
+          const counterElement = document.getElementById(`counter${counterIndex}`);
+          counterElement.getElementsByClassName("counter-number")[0].innerText = nextCustomer.name;
+          counterElement.getElementsByClassName("counter-service")[0].innerText = nextCustomer.service;
+          totalServices++;
+          document.getElementById("totalServices").innerText = totalServices;
+          updateWaitingTimeEstimations();
+        }, 600);
+      } else {
+        alert("Queue is empty.");
+      }
+    }
+
+    function updateWaitingTimeEstimations() {
+      const currentTime = Date.now();
+      const waitingTimeElements = document.querySelectorAll(".waiting-time");
+      waitingTimeElements.forEach((element, index) => {
+        if (queue[index]) {
+          const serviceStartTime = queue[index].startTime;
+          const serviceDuration = getServiceDuration(queue[index].service);
+          const elapsedTime = currentTime - serviceStartTime;
+          const remainingTime = Math.max(serviceDuration - elapsedTime, 0);
+          const remainingMinutes = Math.floor(remainingTime / 60000);
+          const remainingSeconds = Math.floor((remainingTime % 60000) / 1000);
+          element.innerText = `Estimated Waiting Time: ${remainingMinutes}m ${remainingSeconds}s`;
+        } else {
+          element.innerText = "Estimated Waiting Time: N/A";
+        }
+      });
+    }
+
+    function calculateEstimatedWaitingTime(service) {
+      // Adjust service durations as needed
+      const serviceDurations = {
+        customer_services: 10 * 60000, // 10 minutes
+        account: 5 * 60000, // 5 minutes
+        billing_info: 7 * 60000, // 7 minutes
+        general_issues: 8 * 60000, // 8 minutes
+      };
+      return serviceDurations[service] || 10 * 60000; // Default: 10 minutes
+    }
+
+    updateCounters();
+    setInterval(updateWaitingTimeEstimations, 1000);
+    document.getElementById("serviceName").addEventListener("change", updateNewCustomerWaitingTime);
+     
+      // Function to toggle social icons display
+    function toggleSocialIcons() {
+      const socialIcons = document.getElementById("socialIcons");
+      socialIcons.classList.toggle("show");
+    }
+  </script>
+</body>
+
